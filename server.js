@@ -20,10 +20,32 @@ db.once('open', () => {
 });
 
 // Define your MongoDB schema and model here
+const itemSchema = new mongoose.Schema({
+    name: String,
+  });
+  
+  const Item = mongoose.model('Item', itemSchema);
+  
+  // API endpoint to get items from MongoDB
+  app.get('/api/items', async (req, res) => {
+    try {
+      const items = await Item.find();
+      res.json(items);
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).send('Internal Server Error');
+    }
+  });
 
 // Define routes
-app.get('/', (req, res) => {
-  res.send('Hello from Express!');
+app.get('/', async (req, res) => {
+    try {
+        const items = await Item.find();
+        res.json(items);
+      } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send('Internal Server Error');
+      }
 });
 
 // Start server
